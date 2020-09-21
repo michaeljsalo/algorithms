@@ -22,19 +22,20 @@ function makeRandomArray (n = 0) {
 
 // Mutates array for in place swap
 function swapValues (array = [], index1 = 0, index2 = 0) {
-    const value1 = array[index1]
+    const value1 = array[index1];
     const value2 = array[index2];
 
     if (index1 === index2) {
-        console.log(value1 + " stays in place")
+        console.log(index1 + ": " + value1 + " stays in place")
     } else {
         array[index1] = value2;
         array[index2] = value1;
-        console.log(value1 + " swaps with " + value2)
+        console.log(index1 + ": " + value1 + " swaps with " + index2 + ": " + value2)
     }
 }
 
-// For each item of array, swap with one of the remaining values
+// Fisher-Yates shuffle
+// For each item of array, swap with one of the remaining items
 function shuffleArray (array = []) {
     console.log(array)
     for (let index of array.keys()) {
@@ -78,14 +79,14 @@ function bubbleSort2 (array = []) {
 // Find minimum item and swap to beginning
 function selectionSort1 (array = []) {
     console.log(array)
-    for (let pass = 0; pass < array.length - 1; pass += 1) {
-        let minIndex = pass;
-        for (let i = pass + 1; i < array.length; i += 1) {
-            if (array[i] < array[minIndex]) {
-                minIndex = i;
+    for (let i = 0; i < array.length - 1; i += 1) {
+        let minIndex = i;
+        for (let j = i + 1; j < array.length; j += 1) {
+            if (array[j] < array[minIndex]) {
+                minIndex = j;
             }
         }
-        swapValues(array, pass, minIndex);
+        swapValues(array, i, minIndex);
     }
     return array;
 }
@@ -93,14 +94,14 @@ function selectionSort1 (array = []) {
 // Find maximum item and swap to beginning
 function selectionSort2 (array = []) {
     console.log(array)
-    for (let pass = 0; pass < array.length - 1; pass += 1) {
-        let maxIndex = pass;
-        for (let i = pass + 1; i < array.length; i += 1) {
-            if (array[i] > array[maxIndex]) {
-                maxIndex = i;
+    for (let i = 0; i < array.length - 1; i += 1) {
+        let maxIndex = i;
+        for (let j = i + 1; j < array.length; j += 1) {
+            if (array[j] > array[maxIndex]) {
+                maxIndex = j;
             }
         }
-        swapValues(array, pass, maxIndex);
+        swapValues(array, i, maxIndex);
     }
     return array;
 }
@@ -108,14 +109,14 @@ function selectionSort2 (array = []) {
 // Find minimum item and swap to end
 function selectionSort3 (array = []) {
     console.log(array)
-    for (let pass = 0; pass < array.length - 1; pass += 1) {
+    for (let i = 0; i < array.length - 1; i += 1) {
         let minIndex = 0;
-        for (let i = 0; i < array.length - pass; i += 1) {
-            if (array[i] < array[minIndex]) {
-                minIndex = i;
+        for (let j = 0; j < array.length - i; j += 1) {
+            if (array[j] < array[minIndex]) {
+                minIndex = j;
             }
         }
-        swapValues(array, array.length-pass-1, minIndex);
+        swapValues(array, array.length-i-1, minIndex);
     }
     return array;
 }
@@ -123,14 +124,14 @@ function selectionSort3 (array = []) {
 // Find maximum item and swap to end
 function selectionSort4 (array = []) {
     console.log(array)
-    for (let pass = 0; pass < array.length - 1; pass += 1) {
+    for (let i = 0; i < array.length - 1; i += 1) {
         let maxIndex = 0;
-        for (let i = 0; i < array.length - pass; i += 1) {
-            if (array[i] > array[maxIndex]) {
-                maxIndex = i;
+        for (let j = 0; j < array.length - i; j += 1) {
+            if (array[j] > array[maxIndex]) {
+                maxIndex = j;
             }
         }
-        swapValues(array, array.length-pass-1, maxIndex);
+        swapValues(array, array.length-i-1, maxIndex);
     }
     return array;
 }
@@ -140,13 +141,11 @@ function insertionSort1 (array = []) {
     console.log(array)
     // For each item
     for (let i = 1; i < array.length; i += 1) {
-        console.log('i', i)
 
         // Swap it backwards
-        for (let j = i - 1; j >= 0; j -= 1) {
-            console.log('j', j)
-            if (array[j + 1] < array[j]) {
-                swapValues(array, j + 1, j);
+        for (let j = i; j >= 1; j -= 1) {
+            if (array[j] < array[j - 1]) {
+                swapValues(array, j, j - 1);
             } else {
                 break;
             }
@@ -160,25 +159,49 @@ function insertionSort2 (array = []) {
     console.log(array)
     // For each item
     for (let i = 1; i < array.length; i += 1) {
-        let currentValue = array[i];
+        let iValue = array[i];
 
-        // Shift it backwards
-        let j = i - 1;
-        for (j; j >= 0; j -= 1) {
-            if (currentValue < array[j]) {
-                array[j + 1] = array[j];
+        // Shift elements forwards
+        let j;
+        for (j = i; j >= 1; j -= 1) {
+            if (iValue < array[j - 1]) {
+                array[j] = array[j - 1];
             } else {
                 break;
             }
         }
 
-        // Insert into sorted place
+        // Insert into sorted place once
         // Even if it's same as starting place
-        let newIndex = j + 1;
-        array[newIndex] = currentValue;
-        console.log('Insert ' + currentValue + ' at ' + newIndex)
+        array[j] = iValue;
+        console.log('Insert ' + iValue + ' at ' + j)
     }
     return array;
+}
+
+// QuickSort optimized for simplicity
+// Not optimized for time and space
+function quickSort (array = []) {
+
+    // Base case: array of length 1 or 0
+    if (array.length < 2) {
+        return array;
+    }
+
+    // Recursive case: subarray to sort
+
+    // Choose last item as the pivot
+    const pivotIndex = array.length - 1;
+    const pivotValue = array[pivotIndex];
+    console.log("Pivot is " + pivotValue + " at " + pivotIndex)
+
+    // Take advantage of filter to sort around pivot
+    const lowArray = array.filter(item => item < pivotValue);
+    const pivotArray = array.filter(item => item === pivotValue);
+    const highArray = array.filter(item => item > pivotValue);
+
+    // Concatenate sorted subarrays
+    return [ ...quickSort(lowArray), ...pivotArray, ...quickSort(highArray) ];
 }
 
 function linearSearch (array = [], target = -1) {
@@ -260,20 +283,34 @@ function binarySearch2 (array = [], target = -1) {
     } (low, high);
 }
 
+console.clear()
 
-// console.log(makeOrderedArray(15))
-// console.log(makeRandomArray(15))
-// console.log(bubbleSort1(shuffleArray(makeOrderedArray(15))))
-// console.log(bubbleSort2(shuffleArray(makeOrderedArray(15))))
-// console.log(selectionSort1(shuffleArray(makeOrderedArray(15))))
-// console.log(selectionSort2(shuffleArray(makeOrderedArray(15))))
-// console.log(selectionSort3(shuffleArray(makeOrderedArray(15))))
-// console.log(selectionSort4(shuffleArray(makeOrderedArray(15))))
-// console.log(insertionSort1(shuffleArray(makeOrderedArray(15))))
-// console.log(insertionSort2(shuffleArray(makeOrderedArray(15))))
-// console.log(linearSearch(makeOrderedArray(100), 7))
-// console.log(linearSearch(makeRandomArray(100), 7))
-console.log(binarySearch1(makeOrderedArray(100), 7))
-console.log(binarySearch1(makeOrderedArray(100), 77))
-console.log(binarySearch2(makeOrderedArray(100), 7))
-console.log(binarySearch2(makeOrderedArray(100), 77))
+const orderedArray = makeOrderedArray(100)
+console.log(orderedArray)
+
+const randomArray = makeRandomArray(100)
+console.log(randomArray)
+
+// const shuffledArray = shuffleArray(orderedArray)
+// console.log(shuffledArray)
+
+// console.log(bubbleSort1(randomArray))
+// console.log(bubbleSort2(randomArray))
+
+// console.log(selectionSort1(randomArray))
+// console.log(selectionSort2(randomArray))
+// console.log(selectionSort3(randomArray))
+// console.log(selectionSort4(randomArray))
+
+// console.log(insertionSort1(randomArray))
+// console.log(insertionSort2(randomArray))
+
+console.log(quickSort(randomArray))
+
+// console.log(linearSearch(orderedArray, 7))
+// console.log(linearSearch(randomArray, 7))
+
+// console.log(binarySearch1(orderedArray, 7))
+// console.log(binarySearch1(orderedArray, 77))
+// console.log(binarySearch2(orderedArray, 7))
+// console.log(binarySearch2(orderedArray, 77))
