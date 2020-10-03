@@ -98,6 +98,16 @@ function anyToDecimal (digitString = '0', radix = 10) {
     return result
 }
 
+function countDigits (num = 0, base = 10) {
+    let digits = 0
+    let quotient = num
+    while (quotient) {
+        quotient = Math.floor(quotient / base)
+        digits +=1
+    }
+    return digits
+}
+
 function getDigitAsString (number = 0, position = 0) {
     const numberString = String(number);
     position = parseInt(position, 10) || 0;
@@ -150,6 +160,8 @@ console.log(argNum + " to octal (via any): " + decimalToAny(argNum, 8))
 console.log(argNum + " to decimal (via any): " + anyToDecimal(argNum, 8))
 console.log(argNum + " to hex (via any): " + decimalToAny(argNum, 16))
 console.log(argNum + " to decimal (via any): " + anyToDecimal(argNum, 16))
+
+console.log(argNum + " has " + countDigits(argNum, argArity) + " digits in base " + argArity)
 
 // console.log("The " + argPosition + " digit of " + argNum + " is " + getDigitAsString(argNum, argPosition, argArity));
 // console.log("The " + argPosition + " digit of " + argNum + " is " + getDigitAsNumber(argNum, argPosition, argArity));
