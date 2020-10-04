@@ -1,3 +1,5 @@
+// Math.round always rounds to nearest integer
+// This function rounds to any decimal place
 function roundNumber (number = 0, decimalPlaces = 0) {
     const factor = 10 ** decimalPlaces
     const result = Math.round(number * factor) / factor
@@ -108,41 +110,38 @@ function countDigits (num = 0, base = 10) {
     return digits
 }
 
-function getDigitAsString (number = 0, position = 0) {
-    const numberString = String(number);
-    position = parseInt(position, 10) || 0;
-
-    // Simply get a character, counting from the beginning
-    const digitChar = numberString.charAt(numberString.length-1 - position);
-
-    // Or slice it out, counting from the start or the end
-    const sliceStart  = numberString.length - position - 1;
-    const sliceEnd    = numberString.length - position;
-    const digitString = numberString.slice(sliceStart, sliceEnd);
-
-    return digitChar;
+// Return all digits as an array of strings
+// Has to be strings to support all bases
+function getDigits (num = 0, base = 10) {
+    const digits = []
+    let quotient = num
+    while (quotient) {
+        let digit = quotient % base
+        quotient = Math.floor(quotient / base)
+        let digitLetter = decimalToAny(digit, base)
+        digits.push(digitLetter)
+    }
+    return digits
 }
 
-function getDigitAsNumber (number = 0, position = 0, arity = 10) {
-    const numberNumber = parseInt(number, arity);
-    position = parseInt(position, 10) || 0;
-    arity = parseInt(arity, 10) || 10;
-
-    // Get a remainder, then divide down to one digit, then round down
-    const digitRemainder = numberNumber % (Math.pow(arity, position+1));
-    const digitDivided   = digitRemainder / (Math.pow(arity, position));
-    const digitRounded   = Math.floor(digitDivided);
-
-    // Format for display
-    const digitArity     = digitRounded.toString(arity).toUpperCase();
-    return digitArity;
+function isNumberPalindrome (num = 0, base = 10) {
+    const digits = getDigits(num, base)
+    let low = 0
+    let high = digits.length - 1
+    while (low < high) {
+        if (digits[low] !== digits[high]) {
+            return false
+        }
+        low += 1
+        high -= 1
+    }
+    return true
 }
 
 
 const args = process.argv.slice(2);
-const argNum      = args[0] || 0;
-const argPosition = args[1] || 0;
-const argArity    = args[2] || 10;
+const argNum  = args[0] || 0;
+const argBase = args[1] || 10;
 
 console.log(argNum + " rounds to " + roundNumber(argNum, 3))
 console.log(argNum + " rounds to " + roundNumber(argNum, 2))
@@ -161,7 +160,6 @@ console.log(argNum + " to decimal (via any): " + anyToDecimal(argNum, 8))
 console.log(argNum + " to hex (via any): " + decimalToAny(argNum, 16))
 console.log(argNum + " to decimal (via any): " + anyToDecimal(argNum, 16))
 
-console.log(argNum + " has " + countDigits(argNum, argArity) + " digits in base " + argArity)
-
-// console.log("The " + argPosition + " digit of " + argNum + " is " + getDigitAsString(argNum, argPosition, argArity));
-// console.log("The " + argPosition + " digit of " + argNum + " is " + getDigitAsNumber(argNum, argPosition, argArity));
+console.log(argNum + " has " + countDigits(argNum, argBase) + " digits in base " + argBase)
+console.log(argNum + " has digits: " + JSON.stringify(getDigits(argNum, argBase)))
+console.log(argNum + " is a palindrome: " + isNumberPalindrome(argNum, argBase))
