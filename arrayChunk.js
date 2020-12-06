@@ -12,7 +12,6 @@ function chunkArray (array = [], chunkSize = array.length) {
   }, [])
 }
 
-
 const array1 = [1, 2, 3, 4, 5, 6, 7]
 
 console.log(array1)

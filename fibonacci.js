@@ -11,151 +11,151 @@
 // O(n) time, O(n) space
 
 function fibonacciArray (n = 0) {
-	let sequence = [0, 1];
-	for (let i = 2; i <= n; i += 1) {
-		prev2 = sequence[sequence.length - 2]
-		prev1 = sequence[sequence.length - 1]
-		sequence.push(prev2 + prev1);
-	}
-	return sequence;
-	// return sequence[n];
+  const sequence = [0, 1]
+  for (let i = 2; i <= n; i += 1) {
+    prev2 = sequence[sequence.length - 2]
+    prev1 = sequence[sequence.length - 1]
+    sequence.push(prev2 + prev1)
+  }
+  return sequence
+  // return sequence[n];
 }
 
 // O(n) time, O(1) space
 function fibonacciLoop (n = 0) {
-	let fib, prev1, prev2;
-	for (let i = 0; i <= n; i += 1) {
-		if (i < 2) {
-			fib = i;
-			prev1 = i;
-			prev2 = 0;
-		} else if (i >= 2) {
-			fib = prev2 + prev1;
-			prev2 = prev1;
-			prev1 = fib;
-		}
-	}
-	return fib;
+  let fib, prev1, prev2
+  for (let i = 0; i <= n; i += 1) {
+    if (i < 2) {
+      fib = i
+      prev1 = i
+      prev2 = 0
+    } else if (i >= 2) {
+      fib = prev2 + prev1
+      prev2 = prev1
+      prev1 = fib
+    }
+  }
+  return fib
 }
 
 // O(2^n) time, O(n) space
 function fibonacciRecursion (n = 0) {
-	if (n < 2) {
-		return n;
-	} else {
-		return fibonacciRecursion(n - 1) + fibonacciRecursion(n - 2);
-	}
+  if (n < 2) {
+    return n
+  } else {
+    return fibonacciRecursion(n - 1) + fibonacciRecursion(n - 2)
+  }
 }
 
 // O(n) time, O(n) space
 // Sums up in reverse order
 function fibonacciRecursionSingle (n = 0, a = 1, b = 0) {
-    if (n < 2) {
-        return a;
-    } else {
-        return fibonacciRecursionSingle(n-1, a+b, a);
-    }
+  if (n < 2) {
+    return a
+  } else {
+    return fibonacciRecursionSingle(n - 1, a + b, a)
+  }
 }
 
 // O(n) time, O(n) space
 function fibonacciCacheA (n = 0) {
-	if (fibonacciCacheA[n]) {
-		result = fibonacciCacheA[n];
-	} else {
-		if (n < 2) {
-			result = n;
-		} else {
-			result = fibonacciCacheA(n - 1) + fibonacciCacheA(n - 2);
-		}
-		fibonacciCacheA[n] = result;
-	}
-	return result;
+  if (fibonacciCacheA[n]) {
+    result = fibonacciCacheA[n]
+  } else {
+    if (n < 2) {
+      result = n
+    } else {
+      result = fibonacciCacheA(n - 1) + fibonacciCacheA(n - 2)
+    }
+    fibonacciCacheA[n] = result
+  }
+  return result
 }
-fibonacciCacheA.cache = {};
+fibonacciCacheA.cache = {}
 
 // O(n) time, O(n) space
 function fibonacciCacheB (n = 0) {
-	if (!fibonacciCacheB[n]) {
-		if (n < 2) {
-			fibonacciCacheB[n] = n;
-		} else {
-			fibonacciCacheB[n] = fibonacciCacheB(n - 1) + fibonacciCacheB(n - 2);
-		}
-	}
-	return fibonacciCacheB[n];
+  if (!fibonacciCacheB[n]) {
+    if (n < 2) {
+      fibonacciCacheB[n] = n
+    } else {
+      fibonacciCacheB[n] = fibonacciCacheB(n - 1) + fibonacciCacheB(n - 2)
+    }
+  }
+  return fibonacciCacheB[n]
 }
-fibonacciCacheB.cache = {};
+fibonacciCacheB.cache = {}
 
 // O(n) time, O(n) space
 function fibonacciCacheC (n = 0) {
-	if (!fibonacciCacheC[n]) {
-		fibonacciCacheC[n] = (n < 2) ? n : fibonacciCacheC(n - 1) + fibonacciCacheC(n - 2);
-	}
-	return fibonacciCacheC[n];
+  if (!fibonacciCacheC[n]) {
+    fibonacciCacheC[n] = (n < 2) ? n : fibonacciCacheC(n - 1) + fibonacciCacheC(n - 2)
+  }
+  return fibonacciCacheC[n]
 }
-fibonacciCacheC.cache = {};
+fibonacciCacheC.cache = {}
 
 // O(n) time, O(n) space
 function fibonacciMemoA (n = 0) {
-	const memo = {};
+  const memo = {}
 
-	return (function fibonacciInner (n) {
-		if (memo[n]) {
-			result = memo[n];
-		} else {
-			if (n < 2) {
-				result = n;
-			} else {
-				result = fibonacciInner(n - 1) + fibonacciInner(n - 2);
-			}
-			memo[n] = result;
-		}
-		return result;
-	}(n));
+  return (function fibonacciInner (n) {
+    if (memo[n]) {
+      result = memo[n]
+    } else {
+      if (n < 2) {
+        result = n
+      } else {
+        result = fibonacciInner(n - 1) + fibonacciInner(n - 2)
+      }
+      memo[n] = result
+    }
+    return result
+  }(n))
 }
 
 // O(n) time, O(n) space
 function fibonacciMemoB (n = 0) {
-	const memo = {};
+  const memo = {}
 
-	return (function fibonacciInner (n) {
-		if (!memo[n]) {
-			if (n < 2) {
-				memo[n] = n;
-			} else {
-				memo[n] = fibonacciInner(n - 1) + fibonacciInner(n - 2);
-			}
-		}
-		return memo[n];
-	}(n));
+  return (function fibonacciInner (n) {
+    if (!memo[n]) {
+      if (n < 2) {
+        memo[n] = n
+      } else {
+        memo[n] = fibonacciInner(n - 1) + fibonacciInner(n - 2)
+      }
+    }
+    return memo[n]
+  }(n))
 }
 
 // O(n) time, O(n) space
 function fibonacciMemoC (n = 0) {
-    const memo = {};
+  const memo = {}
 
-    return (function fibonacciInner (n) {
-        if (!memo[n]) {
-             memo[n] = (n < 2) ? n : fibonacciInner(n - 1) + fibonacciInner(n - 2);
-        }
-        return memo[n];
-    }(n));
+  return (function fibonacciInner (n) {
+    if (!memo[n]) {
+      memo[n] = (n < 2) ? n : fibonacciInner(n - 1) + fibonacciInner(n - 2)
+    }
+    return memo[n]
+  }(n))
 }
 
 function * fibonacciGenerator (n = 50) {
-	let fib, prev1, prev2;
-	for (let i = 0; i <= n; i += 1) {
-		if (i < 2) {
-			fib = i;
-			prev1 = i;
-			prev2 = 0;
-		} else if (i >= 2) {
-			fib = prev2 + prev1;
-			prev2 = prev1;
-			prev1 = fib;
-		}
-		yield fib;
-	}
+  let fib, prev1, prev2
+  for (let i = 0; i <= n; i += 1) {
+    if (i < 2) {
+      fib = i
+      prev1 = i
+      prev2 = 0
+    } else if (i >= 2) {
+      fib = prev2 + prev1
+      prev2 = prev1
+      prev1 = fib
+    }
+    yield fib
+  }
 }
 
 console.log(fibonacciArray(2))
@@ -184,7 +184,7 @@ console.log(fibonacciMemoA(6))
 console.log(fibonacciMemoA(7))
 console.log(fibonacciMemoA(22))
 
-const gen = fibonacciGenerator();
+const gen = fibonacciGenerator()
 for (let i = 0; i <= 55; i += 1) {
-	console.log(gen.next());
+  console.log(gen.next())
 }
